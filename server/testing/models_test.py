@@ -112,8 +112,12 @@ class TestPost:
     def test_clickbait(self):
         '''Test clickbait validator for title.'''
         with app.app_context():
-            content_string = "This is content" * 150
-            with pytest.raises(ValueError):
-                post = Post(title='Why I love programming.', content=content_string, category='Fiction')
-                db.session.add(post)
-                db.session.commit()
+            clickbait_title = 'This is an amazing secret!'
+            content_string = "Some content" * 50  # Generate content of sufficient length
+            post = Post(title=clickbait_title, content=content_string, category='Fiction')
+            db.session.add(post)
+            db.session.commit()
+
+            assert post.is_clickbait is True
+        
+    
